@@ -1,0 +1,13 @@
+The font (font.ttf) included in this software is Yanone Kaffeesatz
+Regular, obtained from:
+
+  http://code.google.com/webfonts/family?family=Yanone+Kaffeesatz&subset=latin#download
+
+The font is available under the SIL Open Font License 1.1. For more
+information, see 
+
+  http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+
+The original font used for the movie charts at
+http://xach.com/moviecharts/ is a condensed Futura variation. It is
+available for licensing from www.linotype.com.

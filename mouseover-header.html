@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title><!-- TMPL_VAR title --></title>
+    <script language='javascript'>
+      function updateBanner(content, color) {
+          var div = document.getElementById('banner');
+          div.style.backgroundColor = color;
+          div.innerHTML = content;
+      }
+    </script>
+    <style type='text/css'>
+      #banner {
+          position: fixed;
+          padding: 0.25em;
+          left: 16px;
+          top: 16px;
+          background: #F00;
+          color: white;
+      }
+      body { font-family: sans-serif }
+    </style>
+  </head>
+
+  <body>
+    <div id='banner'>Mouse over for details</div>
+    <br><br><br>
+  
