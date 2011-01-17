@@ -21,6 +21,7 @@
            #:find-sample
            #:create-sample
            #:ensure-sample
+           #:add-data
            #:index
            #:bucket
            #:name
@@ -30,6 +31,7 @@
            #:draw-label
            #:establish-colors
            #:height
+           #:width
            #:output-html
            #:all-buckets
            #:only-top-samples

@@ -114,9 +114,9 @@
 
 (defgeneric total-value (object)
   (:method ((thing thing))
-    (reduce #'+ (samples thing) :key #'value))
+    (reduce #'+ (all-samples thing) :key #'value))
   (:method ((bucket bucket))
-    (reduce #'+ (samples bucket) :key #'value)))
+    (reduce #'+ (all-samples bucket) :key #'value)))
 
 
 (defgeneric find-bucket (bucket-index chart)
@@ -178,6 +178,18 @@
 (defmethod height ((sample sample))
   (value sample))
 
+(defmethod height ((bucket bucket))
+  (total-value bucket))
+
+(defmethod height ((chart chart))
+  (loop :for bucket :in (all-buckets chart)
+     :maximize (height bucket)))
+
+(defmethod width ((chart chart))
+  (let ((bucket-count (hash-table-count (buckets chart))))
+    (+ (* bucket-count (bucket-width chart))
+       (* (1- bucket-count) (bucket-gap chart)))))
+
 (defgeneric create-screenbox (sample chart scaler)
   (:method (sample chart scaler)
     (box 0 0 (bucket-width chart) (funcall scaler (height sample)))))
@@ -219,7 +231,10 @@
   (:method ((bucket bucket))
     (bounding-box (mapcar #'screenbox (only-top-samples bucket))))
   (:method ((chart chart))
-    (bounding-box (mapcar #'bounding-box (all-buckets chart)))))
+    (bounding-box
+     ;; emarsden2011-01-16 for bottom gutter
+     (append (list (box 0 -60 100 0))
+             (mapcar #'bounding-box (all-buckets chart))))))
 
 (defun align (chart style)
   (let ((scale (ecase style (:top 1.0) (:center 0.5)))

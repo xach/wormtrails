@@ -134,7 +134,7 @@
       (box-text (bounding-box bucket)
                 string
                 :padding *text-padding*
-                :vertical :below
+                :vertical -20
                 :horizontal :center))))
 
 
@@ -143,12 +143,16 @@
         (x 0)
         (y 0)
         (mid (centerpoint box)))
-    (setf y (ecase vertical
+    (setf y (case vertical
               (:atop (ymax box))
               (:top (- (ymax box) size))
               (:center (- (y mid) (/ size 2)))
               (:bottom (ymin box))
-              (:below (- (ymin box) size))))
+              (:below (- (ymin box) size))
+              (t
+               (if (numberp vertical)
+                   vertical
+                   (error "Unknown vertical specification ~A" vertical)))))
     (setf x (ecase horizontal
               (:left (xmin box))
               (:right (- (xmax box) (xmax string-box)))
