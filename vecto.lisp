@@ -4,7 +4,8 @@
 
 ;;; Specials
 
-(defvar *font-file* "font.ttf")
+(defvar *font-file*
+  (asdf:system-relative-pathname 'wormtrails "font.ttf"))
 (defvar *font-size* 12)
 (defvar *canvas-padding* 16)
 (defvar *text-padding* 2)
