@@ -3,7 +3,7 @@
 (defpackage #:wormtrails
   (:use #:cl #:vecto #:geometry)
   (:shadowing-import-from #:vecto #:scale)
-  (:export #:chart #:bucket #:thing
+  (:export #:chart #:bucket #:thing #:sample
            #:*bucket-width*
            #:*bucket-gap*
            #:*sample-gap*
@@ -42,11 +42,13 @@
            #:random-range
            #:filename-only
            #:linear-scaler
+           #:log-scaler
            #:string-hash
            #:hash-range
            #:rgb-color
            #:rgba-color
            #:hsv-color
-           #:html-code))
+           #:html-code
+           #:layout))
 
 (in-package #:wormtrails)
