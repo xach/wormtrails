@@ -300,6 +300,7 @@
                  (hash1 (hash1 (name thing)))
                  (hash2 (hash2 (name thing))))
             (when (eql debut sample)
+              
               (setf (color thing) (hsv-color (hash-range start hash1 end)
                                              (hash-range 0.7 hash2 1.0)
                                              (hash-range 0.8 hash2 1.0))))))))))

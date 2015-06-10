@@ -49,6 +49,8 @@
            #:rgba-color
            #:hsv-color
            #:html-code
-           #:layout))
+           #:layout
+           #:color
+           #:draw-background))
 
 (in-package #:wormtrails)

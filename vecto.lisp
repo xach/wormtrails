@@ -64,17 +64,20 @@
   (close-subpath))
 
 (defun connect-buckets (chart)
-  (loop for (left . rest) on (all-buckets chart)
-        for right = (first rest)
-        while right do
-        (dolist (left-sample (only-top-samples left))
-          (let ((right-sample (find-top-sample (thing left-sample) right)))
-            (when right-sample
-              (with-graphics-state
-                (set-fill-color* (color (thing left-sample)))
-                (draw-box-glue (screenbox left-sample)
-                               (screenbox right-sample))
-                (fill-path)))))))
+  (let ((count 0))
+    (loop for (left . rest) on (all-buckets chart)
+          for right = (first rest)
+          while right do
+          (dolist (left-sample (only-top-samples left))
+            (let ((right-sample (find-top-sample (thing left-sample) right)))
+              (when right-sample
+                (incf count)
+                (with-graphics-state
+                  (set-fill-color* (color (thing left-sample)))
+                  (draw-box-glue (screenbox left-sample)
+                                 (screenbox right-sample))
+                  (fill-path))))))
+    count))
 
 (defgeneric chart-label (object))
 
@@ -86,6 +89,9 @@
 
 
 (defgeneric draw-label (object))
+
+(defgeneric draw-background (object)
+  (:method ((object t))))
 
 (defun ellipsize (string font-size width)
   (let ((loader (get-font *font-file*)))
@@ -285,6 +291,7 @@
     (:bottom))
   (establish-colors chart)
   (with-box-canvas (expand (bounding-box chart) *canvas-padding*)
+    (draw-background chart)
     (save-html chart png-file)
     (set-font (get-font *font-file*) *font-size*)
     (when (and metric-height metric-label)
