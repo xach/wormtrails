@@ -27,6 +27,7 @@
            #:name
            #:screenbox
            #:value
+           #:sort-value
            #:chart-label
            #:draw-label
            #:establish-colors
@@ -34,6 +35,9 @@
            #:width
            #:output-html
            #:all-buckets
+           #:all-samples
+           #:all-things
+           #:find-top-sample
            #:only-top-samples
            #:samples
            #:best-label-sample

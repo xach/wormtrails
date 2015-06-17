@@ -69,7 +69,7 @@
 
 (defgeneric all-samples (container)
   (:method ((bucket bucket))
-    (sort (table-values (samples bucket)) #'< :key 'value)))
+    (sort (table-values (samples bucket)) #'< :key #'sort-value)))
 
 (defclass sample ()
   ((thing
@@ -86,7 +86,6 @@
     :accessor value))
   (:default-initargs
    :value 0))
-
 
 (defmethod print-object ((sample sample) stream)
   (print-unreadable-object (sample stream :type t :identity t)
@@ -266,9 +265,15 @@
         (dolist (sample (first-n count (reverse (all-samples bucket))))
           (setf (gethash (thing sample) new-table) sample))))))
 
+(defgeneric sort-value (object)
+  (:documentation "A value used for ordering samples, but not
+  necessarily for drawing them.")
+  (:method ((object t))
+    (value object)))
+
 (defgeneric only-top-samples (container)
   (:method ((bucket bucket))
-    (sort (table-values (top-samples bucket)) #'< :key #'value))
+    (sort (table-values (top-samples bucket)) #'< :key #'sort-value))
   (:method ((chart chart))
     (reduce #'nconc (mapcar #'only-top-samples (all-buckets chart)))))
 
