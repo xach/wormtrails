@@ -63,21 +63,37 @@
   (gentle-curve-to (bottom-left b2) (bottom-right b1))
   (close-subpath))
 
+(defun bucket-connections (buckets)
+  "Return a list of connections between samples in BUCKETS. There is
+  list of connections per bucket. Each connection is a (DISTANCE
+  LEFT-SAMPLE RIGHT-SAMPLE) triplet."
+  (labels ((find-connection (sample buckets)
+             (let ((thing (thing sample)))
+               (loop for distance from 0
+                     for bucket in buckets
+                     for samples = (wormtrails::samples bucket)
+                     for target = (gethash thing samples)
+                     when target
+                     return (list distance sample target)))))
+    (loop for (bucket . rest) on buckets
+          collect (loop for sample in (all-samples bucket)
+                        for connection = (find-connection sample rest)
+                        when connection collect connection))))
+
+(defgeneric draw-connection (left-sample right-sample)
+  (:method (left-sample right-sample)
+    (with-graphics-state
+      (set-fill-color* (color left-sample))
+      (draw-box-glue (screenbox left-sample)
+                     (screenbox right-sample))
+      (fill-path))))
+
 (defun connect-buckets (chart)
-  (let ((count 0))
-    (loop for (left . rest) on (all-buckets chart)
-          for right = (first rest)
-          while right do
-          (dolist (left-sample (only-top-samples left))
-            (let ((right-sample (find-top-sample (thing left-sample) right)))
-              (when right-sample
-                (incf count)
-                (with-graphics-state
-                  (set-fill-color* (color (thing left-sample)))
-                  (draw-box-glue (screenbox left-sample)
-                                 (screenbox right-sample))
-                  (fill-path))))))
-    count))
+  (let ((connections (bucket-connections (all-buckets chart))))
+    (dolist (bucket-connections connections)
+      (loop for (distance left right) in bucket-connections
+            when (= distance 0)
+            do (draw-connection left right)))))
 
 (defgeneric chart-label (object))
 
@@ -296,12 +312,13 @@
     (set-font (get-font *font-file*) *font-size*)
     (when (and metric-height metric-label)
       (draw-metrics chart metric-height metric-label :alignment alignment))
+    (connect-buckets chart)
     (dolist (bucket (all-buckets chart))
       (dolist (sample (only-top-samples bucket))
         (box-rectangle (screenbox sample))
-        (set-fill-color* (color (thing sample)))
+        (set-fill-color* (color sample))
         (fill-path)))
-    (connect-buckets chart)
+
     (when labels
       (dolist (thing (only-top-things chart))
         (when (samples thing) (draw-label thing)))

@@ -117,6 +117,8 @@
   (:method ((bucket bucket))
     (reduce #'+ (all-samples bucket) :key #'value)))
 
+(defmethod color ((sample sample))
+  (color (thing sample)))
 
 (defgeneric find-bucket (bucket-index chart)
   (:method (bucket-index chart)

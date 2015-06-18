@@ -30,6 +30,7 @@
            #:sort-value
            #:chart-label
            #:draw-label
+           #:draw-connection
            #:establish-colors
            #:height
            #:width
